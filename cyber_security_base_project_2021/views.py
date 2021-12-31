@@ -17,8 +17,8 @@ def logout(request):
 def login(request):
     if request.GET.get('username') is not None \
             and request.GET.get('password') is not None:
-        user = User.objects.filter(username=request.GET.get('username')).first()
-        if user is not None and user.password == request.GET.get('password'):
+        user = User.objects.filter(username=request.GET.get('username'), password=request.GET.get('password')).first()
+        if user is not None:
             request.session['user_id'] = user.id
             return HttpResponseRedirect("/notes")
         return HttpResponse('Unauthorized', status=401)
@@ -37,3 +37,15 @@ def notes(request):
     all_notes = Note.objects.filter(user_id=request.session.get("user_id")).all()
     template = loader.get_template('notes.html')
     return HttpResponse(template.render({'notes': all_notes, 'user': user}, request))
+
+
+def register(request):
+    if request.GET.get('username') is not None \
+            and request.GET.get('password') is not None:
+        u = User(username=request.GET.get('username'), password=request.GET.get('password'))
+        u.save()
+        u2 = User.objects.filter(username=request.GET.get('username')).first()
+        request.session['user_id'] = u2.id
+        return HttpResponseRedirect("/notes")
+    template = loader.get_template('register.html')
+    return HttpResponse(template.render({}, request))
