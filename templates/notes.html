@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes</title>
+</head>
+<body>
+<h3>Hello {{ user.username }}</h3>
+<a href="/logout">Logout</a>
+<h4>Notes</h4>
+<ul>
+{% for note in notes %}
+    <li>{{ note.content }}</li>
+{% endfor %}
+</ul>
+<form action="/notes" method="get">
+    <input type="hidden" value="{{ user.id }}" name="user_id"">
+    <label for="note-field">Note</label><br>
+    <textarea name="note_content" id="note-field"></textarea><br>
+    <button type="submit">Add note</button>
+</form>
+</body>
+</html>
